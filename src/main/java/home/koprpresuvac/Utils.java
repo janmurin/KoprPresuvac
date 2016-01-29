@@ -75,4 +75,35 @@ public class Utils {
         double megabajtovZaSekundu = stiahnutychMB / sekundE;
         return df.format(megabajtovZaSekundu) + " MB/s";
     }
+
+    static String getElapsedTime(long startTime, long previousElapsed) {
+        double elapsedTime = ((System.currentTimeMillis() - startTime) / 1000.0) + previousElapsed / 1000;
+        int hodinE = (int) ((elapsedTime) / (3600));
+        int minutE = (int) ((elapsedTime) / (60));
+        int sekundE = (int) ((elapsedTime));
+        sekundE %= 60;
+        minutE %= 60;
+        String hodinStringE = "" + hodinE;
+        if (hodinE < 10) {
+            hodinStringE = "0" + hodinE;
+        }
+        String minutStringE = "" + minutE;
+        if (minutE < 10) {
+            minutStringE = "0" + minutE;
+        }
+        String sekundStringE = "" + sekundE;
+        if (sekundE < 10) {
+            sekundStringE = "0" + sekundE;
+        }
+        //System.out.println("ETA:" + (hodinStringE + ":" + minutStringE + ":" + sekundStringE));
+        return (hodinStringE + ":" + minutStringE + ":" + sekundStringE);
+    }
+
+    static String getRychlost(long startTime, long previousElapsed, int stiahnutych) {
+        double elapsedTime = ((System.currentTimeMillis() - startTime) / 1000.0) + previousElapsed / 1000;
+        int sekundE = (int) ((elapsedTime));
+        double stiahnutychMB = stiahnutych / (1024 * 1024);
+        double megabajtovZaSekundu = stiahnutychMB / sekundE;
+        return df.format(megabajtovZaSekundu) + " MB/s";
+    }
 }
