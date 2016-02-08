@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package home.koprpresuvac;
+package home.entity;
 
 /**
  *
  * @author Janco1
  */
-class ProgressbarStatus {
+public class ProgressbarStatus {
 
-    int kopirovanieProgress;
-    String rychlost;
-    String ostava;
-    String uplynulo;
+    public int kopirovanieProgress;
+    public String rychlost;
+    public String ostava;
+    public String uplynulo;
 
-    ProgressbarStatus(int kopirovanieProgress, String elapsedTime, String etAtime, String rychlost) {
+    public ProgressbarStatus(int kopirovanieProgress, String elapsedTime, String etAtime, String rychlost) {
         this.kopirovanieProgress=kopirovanieProgress;
         this.ostava=etAtime;
         this.uplynulo=elapsedTime;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package home.koprpresuvac;
+package home.entity;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -14,8 +14,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class KopirovanieSession {
     
-    final long elapsedTime;
-    final CopyOnWriteArrayList<ClientData> clientData;
+    public final long elapsedTime;
+    public final CopyOnWriteArrayList<ClientData> clientData;
 
     public KopirovanieSession(long elapsedTime, CopyOnWriteArrayList<ClientData> clientData) {
         this.elapsedTime = elapsedTime;

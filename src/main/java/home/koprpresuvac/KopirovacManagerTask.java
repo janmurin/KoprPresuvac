@@ -5,6 +5,8 @@
  */
 package home.koprpresuvac;
 
+import home.entity.KopirovanieResult;
+import home.entity.ClientData;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;

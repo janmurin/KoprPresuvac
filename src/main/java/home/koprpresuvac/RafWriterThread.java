@@ -5,6 +5,7 @@
  */
 package home.koprpresuvac;
 
+import home.entity.ClientData;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;

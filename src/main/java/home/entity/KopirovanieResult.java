@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package home.koprpresuvac;
+package home.entity;
 
 import java.util.List;
 
@@ -11,14 +11,14 @@ import java.util.List;
  *
  * @author Janco1
  */
-class KopirovanieResult {
+public class KopirovanieResult {
 
-    final long finishTime;
-    final int velkostSuboru;
-    final boolean uspesne;
-    final List<ClientData> clientData;
+    public final long finishTime;
+    public final int velkostSuboru;
+    public final boolean uspesne;
+    public final List<ClientData> clientData;
 
-    KopirovanieResult(long currentTimeMillis, int velkostSuboru, boolean uspesne, List<ClientData> clientData) {
+    public KopirovanieResult(long currentTimeMillis, int velkostSuboru, boolean uspesne, List<ClientData> clientData) {
         this.finishTime = currentTimeMillis;
         this.velkostSuboru = velkostSuboru;
         this.uspesne = uspesne;

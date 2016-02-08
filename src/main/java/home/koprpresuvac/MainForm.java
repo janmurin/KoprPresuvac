@@ -5,6 +5,10 @@
  */
 package home.koprpresuvac;
 
+import home.entity.KopirovanieSession;
+import home.entity.KopirovanieResult;
+import home.entity.ProgressbarStatus;
+import home.entity.ClientData;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -459,8 +463,7 @@ public class MainForm extends javax.swing.JFrame {
                     // 1. chceli sme pozastavit a treba si zapametat co sme nestihli (prerusenie pausnutim)
                     // 2. chceme na vsetko zabudnut(prerusenie zrusenim)
                     // po preruseni by sme sa tu mali takmer vzdy dostat
-                    {
-                        if (!chcemeZahodit) {
+                     if (!chcemeZahodit) {
                             System.out.println("MainForm: kopirovanie neuspesne a chceme ulozit ciastocne data");
                             // ulozime do suboru clientdata, nechame progressbar tak ako bol
                             long totalElapsed = (System.currentTimeMillis() - start);
@@ -478,7 +481,6 @@ public class MainForm extends javax.swing.JFrame {
                             // neriesime subor s client datami lebo dalsi start button bude znamenat nove kopirovanie
                             publish(new ProgressbarStatus(0, "00:00:00", "00:00:00", ""));
                         }
-                    }
                     System.out.println("enablujem start button");
                     startButton.setEnabled(true);
                     System.out.println("manager cancelled: " + future.isCancelled() + " isDone=" + future.isDone() + " ");
@@ -507,6 +509,11 @@ public class MainForm extends javax.swing.JFrame {
                 if (status.kopirovanieProgress == 100) {
                     System.out.println("MainForm: vypinam buttony po uspesnom kopirovani");
                     aktivujZrusenieButtony();
+                    // vymazeme clientData.txt subor ak existuje aby pri spustani nas nechcelo resumovat
+                    File f = new File(Shared.DATA_FILE);
+                    if (f.exists() && !f.isDirectory()) {
+                        f.delete();
+                    }
                 }
             }
 

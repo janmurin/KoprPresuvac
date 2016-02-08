@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package home.koprpresuvac;
+package home.entity;
 
 /**
  *
  * @author Janco1
  */
-class ClientData {
+public class ClientData {
 
-    final int startOffset;
-    final int zapisanychOffset;
-    final int chunkSize;
+    public final int startOffset;
+    public final int zapisanychOffset;
+    public final int chunkSize;
 
     public ClientData(int startOffset, int zapisanychOffset, int chunkSize) {
         this.startOffset = startOffset;
