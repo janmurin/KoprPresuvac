@@ -108,6 +108,7 @@ public class MainForm extends javax.swing.JFrame {
         rychlostLabel1 = new javax.swing.JLabel();
         elapsedLabel1 = new javax.swing.JLabel();
         remainingLabel1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -158,6 +159,8 @@ public class MainForm extends javax.swing.JFrame {
 
         remainingLabel1.setText("00:00:00");
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/header.jpg"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -173,22 +176,25 @@ public class MainForm extends javax.swing.JFrame {
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(pocetSoketovSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(zrusitButton)))
                     .addComponent(kopirovanieProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(elapsedLabel)
-                            .addComponent(rychlostLabel)
-                            .addComponent(remainingLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rychlostLabel1)
-                            .addComponent(elapsedLabel1)
-                            .addComponent(remainingLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(elapsedLabel)
+                                    .addComponent(rychlostLabel)
+                                    .addComponent(remainingLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rychlostLabel1)
+                                    .addComponent(elapsedLabel1)
+                                    .addComponent(remainingLabel1)))
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -221,7 +227,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(remainingLabel)
                     .addComponent(remainingLabel1))
-                .addContainerGap(140, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(56, 56, 56))
         );
 
         pack();
@@ -329,6 +337,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JTextArea destinationDetailTextArea;
     private javax.swing.JLabel elapsedLabel;
     private javax.swing.JLabel elapsedLabel1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -512,7 +521,9 @@ public class MainForm extends javax.swing.JFrame {
                     // vymazeme clientData.txt subor ak existuje aby pri spustani nas nechcelo resumovat
                     File f = new File(Shared.DATA_FILE);
                     if (f.exists() && !f.isDirectory()) {
-                        f.delete();
+                        System.out.println("MainForm: mazem subor "+Shared.DATA_FILE);
+                        boolean delete = f.delete();
+                        System.out.println("MainForm: subor zmazany? --> "+delete);
                     }
                 }
             }

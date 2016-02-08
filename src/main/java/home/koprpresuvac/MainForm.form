@@ -37,25 +37,30 @@
                               <Component id="pocetSoketovSpinner" min="-2" pref="65" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="46" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane2" min="-2" pref="322" max="-2" attributes="0"/>
                           <Component id="zrusitButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="kopirovanieProgressBar" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="elapsedLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="rychlostLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="remainingLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="rychlostLabel1" min="-2" max="-2" attributes="0"/>
-                          <Component id="elapsedLabel1" min="-2" max="-2" attributes="0"/>
-                          <Component id="remainingLabel1" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="elapsedLabel" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rychlostLabel" min="-2" max="-2" attributes="0"/>
+                                  <Component id="remainingLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="rychlostLabel1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="elapsedLabel1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="remainingLabel1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -99,7 +104,9 @@
                   <Component id="remainingLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="remainingLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="140" max="32767" attributes="0"/>
+              <EmptySpace pref="84" max="32767" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -212,6 +219,13 @@
     <Component class="javax.swing.JLabel" name="remainingLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="00:00:00"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/header.jpg"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>
