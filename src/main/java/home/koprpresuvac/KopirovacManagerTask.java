@@ -54,15 +54,17 @@ class KopirovacManagerTask implements Callable<KopirovanieResult> {
             this.resumujeme = true;
         }
         Shared.clientData = new CopyOnWriteArrayList<>();
+        Shared.writeTasky = new LinkedBlockingQueue<>();
     }
 
     @Override
     public KopirovanieResult call() throws Exception {
         initNazovVelkostServerSuboru();
         System.out.println("KopirovacManagerTask spusteny, kopirujem subor: " + nazovSuboru + " do " + destFolder);
-        ExecutorService downloaderExecutor = Executors.newFixedThreadPool(soketov);
-        List<Future<?>> downloadFutures = new ArrayList<>();
-        CountDownLatch downloaderGate = new CountDownLatch(soketov);
+        ExecutorService downloaderExecutor = Executors.newFixedThreadPool(soketov+1);// plus writer vlakno
+        //List<Future<?>> downloadFutures = new ArrayList<>();
+        CountDownLatch downloaderGate = new CountDownLatch(soketov); 
+        CountDownLatch writerGate = new CountDownLatch(1); 
 
         try {
             int clientChunkSize = (int) Math.ceil(velkostSuboru / (double) soketov);
@@ -78,19 +80,27 @@ class KopirovacManagerTask implements Callable<KopirovanieResult> {
                     Shared.clientData.add(new ClientData(startOffset, startOffset, chunk));
                     DownloadClient downloader = new DownloadClient(downloaderGate, i, raf, writeSemafor, startOffset, chunk);
                     Future<?> searcherFuture = downloaderExecutor.submit(downloader);
-                    downloadFutures.add(searcherFuture);
+                    //downloadFutures.add(searcherFuture);
                 } else {
                     int startOffset = oldClientData.get(i).zapisanychOffset;
                     int chunk = (oldClientData.get(i).startOffset + oldClientData.get(i).chunkSize) - oldClientData.get(i).zapisanychOffset;
                     Shared.clientData.add(new ClientData(startOffset, startOffset, chunk));
                     DownloadClient downloader = new DownloadClient(downloaderGate, i, raf, writeSemafor, startOffset, chunk);
                     Future<?> searcherFuture = downloaderExecutor.submit(downloader);
-                    downloadFutures.add(searcherFuture);
+                    //downloadFutures.add(searcherFuture);
                 }
             }
-
+            // spustime writer vlakno
+            RafWriterThread rwt=new RafWriterThread(raf, writerGate);
+            downloaderExecutor.submit(rwt);
             downloaderGate.await();
-
+            // ked skoncia clienti tak posleme poison pill writerovi
+            System.out.println("KopirovacManagerTask: posielam writerovi poison pill, cakam na skoncenie writera");
+            Shared.writeTasky.offer(new WriteTask(null, -1, -1, -1, -1));
+            // pockame kym neskonci
+            writerGate.await();
+            System.out.println("KopirovacManagerTask: writer skoncil");
+            
             System.out.println("KopirovacManagerTask: kopirovanie ukoncene");
         } catch (InterruptedException e) {
             System.out.println("KopirovacManagerTask: PRERUSENIE " + e.getMessage() + " zatvaram downloadery");
@@ -112,9 +122,12 @@ class KopirovacManagerTask implements Callable<KopirovanieResult> {
 //                    }
 //                }
 //            }
-            downloaderGate.await();
-            System.out.println("KopirovacManagerTask: vsetky downloadery interruptnute");
-
+            downloaderGate.await();// downloaderi skoncia hned, writer az ked zapise data
+            System.out.println("KopirovacManagerTask: vsetky downloadery interruptnute, cakam na skoncenie writera");
+            writerGate.await();
+            System.out.println("KopirovacManagerTask: writer ukonceny");
+            System.out.println("KopirovacManagerTask: prerusenie ulohy, KopirovacManagerTask skoncil");
+            
             return new KopirovanieResult(System.currentTimeMillis(), velkostSuboru, false, Shared.clientData);// true ako uspesne
         } catch (Exception e) {
             //Logger.getLogger(KopirovacManagerTask.class.getName()).log(Level.SEVERE, null, e);

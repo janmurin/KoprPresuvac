@@ -53,6 +53,32 @@ public class MainForm extends javax.swing.JFrame {
         sourceDetailTextArea.setText(text);
         setLocationRelativeTo(null);
         destFolder = "C:\\Users\\Janco1\\Desktop";
+        File f = new File(Shared.DATA_FILE);
+        if (f.exists() && !f.isDirectory()) {
+            // existuje subor, bolo prerusene kopirovanie
+            chcemeZahodit = false;
+            sourceDetailTextArea.setText("cesta: \n" + vybranySubor.getAbsolutePath() + "\n velkost: " + vybranySubor.length() + "\n subor clientData.txt najdeny,\n resumuje sa kopirovanie");
+            KopirovanieSession session = loadClientData();
+            // zistime aktualne stavy u clientov
+            List<ClientData> data = session.clientData;
+            int prenesenych = 0;
+            int vsetkych = 0;
+            for (ClientData cd : data) {
+                prenesenych += cd.zapisanychOffset - cd.startOffset;
+                vsetkych += cd.chunkSize;
+            }
+            if (vsetkych != 0) {
+                // ak sa stihol nejaky vysledok tak publish
+                int kopirovanieProgress = (int) ((prenesenych) / ((double) vsetkych) * 100);
+                kopirovanieProgressBar.setValue(kopirovanieProgress);
+                rychlostLabel1.setText("" + Utils.getRychlost(System.currentTimeMillis(), session.elapsedTime, prenesenych));
+                elapsedLabel1.setText("" + Utils.getElapsedTime(System.currentTimeMillis(), session.elapsedTime));
+                remainingLabel1.setText("" + "00:00");
+            }
+            zrusitButton.setEnabled(true);
+            startButton.setText("RESUME");
+            beziKopirovanie = false;
+        }
     }
 
     /**
@@ -333,7 +359,7 @@ public class MainForm extends javax.swing.JFrame {
                 long start = System.currentTimeMillis();
                 int prenesenychResume = 0;
                 long previousElapsed = 0;
-                
+
                 try {
                     kopirovacManagerExecutor = Executors.newSingleThreadExecutor();
                     // init premenne pre resume
@@ -463,6 +489,8 @@ public class MainForm extends javax.swing.JFrame {
                 }
 
                 System.out.println("Mainform: kopirovanie skoncene");
+                // uvolnime pamet
+                Shared.writeTasky = null;
                 beziKopirovanie = false;
                 kopirovanieWorker = null;
                 return null;

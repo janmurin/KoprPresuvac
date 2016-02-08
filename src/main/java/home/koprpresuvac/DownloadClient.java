@@ -36,9 +36,9 @@ public class DownloadClient implements Runnable {
     private Socket clientSocket;
     private final int startOffset;
     private final int chunkSize;
+    private int zapisanychOffset;
     private FileOutputStream fos;
     private BufferedOutputStream bos;
-    private int zapisanychOffset;
 
     DownloadClient(CountDownLatch downloaderGate, int i, RandomAccessFile raf, Semaphore writeSemafor, int offset, int chunkSize) {
         this.downloaderGate = downloaderGate;
@@ -124,30 +124,32 @@ public class DownloadClient implements Runnable {
         if (nacitanychBajtov == 0) {
             return;
         }
-        try {
-            System.out.println("DownloadClient[" + id + "]: caka na writeSemafor.acquire()");
-            writeSemafor.acquire();
-            System.out.println("DownloadClient[" + id + "]: dostal semafor a zapisuje: " + nacitanychBajtov);
-            // ked uz zapisujem data tak ich zapisem
-            //synchronized (this) {
-            raf.seek(zapisanychOffset);
-            if (nacitanychBajtov == buffer.length) {
-                raf.write(buffer);
-            } else {
-                raf.write(Arrays.copyOfRange(buffer, 0, nacitanychBajtov));
-            }
-            zapisanychOffset += nacitanychBajtov;
-            // nevadi ze tento kod je v synchronized??
-            Shared.clientData.set(id, new ClientData(startOffset, zapisanychOffset, chunkSize));
-            //}
-            writeSemafor.release();
-        } catch (IOException ex) {
-            Logger.getLogger(DownloadClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            //Logger.getLogger(DownloadClient.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("DownloadClient[" + id + "]: interrupt v zapisData");
-            throw new InterruptedException();
-        }
+ //       try {
+//            System.out.println("DownloadClient[" + id + "]: caka na writeSemafor.acquire()");
+//            writeSemafor.acquire();
+//            System.out.println("DownloadClient[" + id + "]: dostal semafor a zapisuje: " + nacitanychBajtov);
+//            // ked uz zapisujem data tak ich zapisem
+//            //synchronized (this) {
+//            raf.seek(zapisanychOffset);
+//            if (nacitanychBajtov == buffer.length) {
+//                raf.write(buffer);
+//            } else {
+//                raf.write(Arrays.copyOfRange(buffer, 0, nacitanychBajtov));
+//            }
+//            zapisanychOffset += nacitanychBajtov;
+//            // nevadi ze tento kod je v synchronized??
+//            Shared.clientData.set(id, new ClientData(startOffset, zapisanychOffset, chunkSize));
+//            //}
+//            writeSemafor.release();
+            
+            System.out.println("DownloadClient[" + id + "]: posiela write task writerovi");
+            Shared.writeTasky.offer(new WriteTask(Arrays.copyOfRange(buffer, 0, nacitanychBajtov), startOffset, zapisanychOffset, chunkSize, id));
+            zapisanychOffset += nacitanychBajtov;// writer tiez musi incrementnut
+//        } catch (InterruptedException ex) {
+//            //Logger.getLogger(DownloadClient.class.getName()).log(Level.SEVERE, null, ex);
+//            System.out.println("DownloadClient[" + id + "]: interrupt v zapisData");
+//            throw new InterruptedException();
+//        }
     }
 
 }
